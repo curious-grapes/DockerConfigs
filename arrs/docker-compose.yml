@@ -1,0 +1,76 @@
+---
+version: "2.1"
+services:
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    network_mode: bridge
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Kyiv
+    volumes:
+      - /home/roman/configs/arrs/radarr:/config
+      - /mnt/media:/data #optional
+      - /mnt/media/Downloads:/downloads
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    network_mode: bridge
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Kyiv
+    volumes:
+      - /home/roman/configs/arrs/sonarr:/config
+      - /mnt/media:/data #optional
+      - /mnt/media/Downloads:/downloads
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    network_mode: bridge
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Kyiv
+    volumes:
+      - /home/roman/configs/arrs/prowlarr:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    network_mode: bridge
+    environment:
+        - LOG_LEVEL=debug
+        - TZ=Europe/Kyiv
+    ports:
+        - 5055:5055
+    volumes:
+        - /home/roman/configs/arrs/overseerr:/app/config
+    restart: unless-stopped
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Kyiv
+    volumes:
+      - /home/roman/configs/arrs/bazarr:/config
+      - /mnt/media/Movies:/movies #optional
+      - /mnt/media/Series:/tv #optional
+    ports:
+      - 6767:6767
+    restart: unless-stopped

@@ -1,0 +1,17 @@
+---
+version: '3.3'
+
+services:
+  authelia:
+    image: authelia/authelia
+    container_name: authelia
+    network_mode: bridge
+    volumes:
+      - /home/roman/configs/authelia:/config
+    ports:
+      - 8007:9092
+    restart: unless-stopped
+    healthcheck:
+      disable: true
+    environment:
+      - TZ=Europe/Kyiv

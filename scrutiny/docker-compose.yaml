@@ -1,0 +1,28 @@
+version: "3.3"
+services:
+  matomo:
+    container_name: scrutiny_web
+    image: ghcr.io/analogj/scrutiny:master-web
+    ports:
+      - 8015:8080
+    volumes:
+      - /home/roman/configs/scrutiny:/opt/scrutiny/config
+    networks:
+      - scrutiny
+    depends_on:
+      - scrutiny_db
+    restart: unless-stopped
+    privileged: true
+  scrutiny_db:
+    container_name: scrutiny_db
+    image: influxdb:2.2
+    environment:
+      INFLUXD_REPORTING_DISABLED: "true"
+    volumes:
+      - /home/roman/configs/scrutiny/influxdb2:/var/lib/influxdb2
+    networks:
+      - scrutiny
+    restart: unless-stopped
+networks:
+  scrutiny:
+    driver: bridge

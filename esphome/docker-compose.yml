@@ -1,0 +1,12 @@
+version: '3.3'
+services:
+  esphome:
+    container_name: esphome
+    network_mode: bridge
+    ports:
+      - '7001:6052'
+    privileged: true
+    volumes:
+      - /home/roman/configs/esphome:/config
+    restart: unless-stopped
+    image: esphome/esphome

@@ -1,0 +1,13 @@
+services:
+  metube:
+    image: ghcr.io/alexta69/metube
+    container_name: metube
+    restart: unless-stopped
+    ports:
+      - "8020:8081"
+    volumes:
+      - /mnt/share/Media/Downloads/youtube:/downloads
+    environment:
+      - DELETE_FILE_ON_TRASHCAN=true
+      - PUBLIC_HOST_URL=${PUBLIC_HOST_URL}
+      - DEFAULT_OPTION_PLAYLIST_STRICT_MODE=true

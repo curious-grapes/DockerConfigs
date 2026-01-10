@@ -1,0 +1,19 @@
+---
+version: "2.1"
+services:
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Kyiv
+      - WEBUI_PORT=8056
+    volumes:
+      - /home/roman/configs/qbittorrent:/config
+      - /mnt/share/Media/Downloads:/downloads
+    ports:
+      - 8016:8056
+      - 6881:6881
+      - 6881:6881/udp
+    restart: unless-stopped

@@ -1,0 +1,55 @@
+services:
+  guacamole:
+    image: guacamole/guacamole:latest
+    container_name: guacamole
+    security_opt:
+      - label:disable
+    volumes:
+      - /home/roman/configs/guacamole/data/extensions:/guacamole-home/extensions
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - GUACD_HOSTNAME=guacamole-guacd
+      - GUACAMOLE_HOME=/guacamole-home
+      - POSTGRESQL_HOSTNAME=guacamole-db
+      - POSTGRESQL_DATABASE=guacamole_db
+      - POSTGRESQL_USER=${POSTGRES_USER}
+      - POSTGRESQL_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - ${HTTP_PORT}:8080
+    restart: always
+    networks:
+      - guacamole-nw
+
+  guacamole-guacd:
+    image: guacamole/guacd:latest
+    container_name: guacamole-guacd
+    security_opt:
+      - label:disable
+    networks:
+      - guacamole-nw
+    restart: always
+    volumes:
+      - /home/roman/configs/guacamole/data/records:/record
+      - /home/roman/configs/guacamole/data/drive:/drive
+      - /etc/localtime:/etc/localtime:ro
+
+  guacamole-db:
+    image: postgres:13
+    container_name: guacamole-db
+    security_opt:
+      - label:disable
+    restart: always
+    environment:
+      - POSTGRES_DB=guacamole_db
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - /home/roman/configs/guacamole/data/db:/var/lib/postgresql/data
+      - /etc/localtime:/etc/localtime:ro
+      - /home/roman/configs/guacamole/data/db-init/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql # can be removed after initialization
+    networks:
+      - guacamole-nw
+
+networks:
+  guacamole-nw:
+    external: true
