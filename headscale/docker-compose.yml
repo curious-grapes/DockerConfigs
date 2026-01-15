@@ -1,0 +1,33 @@
+version: "3.3"
+
+services:
+  headscale:
+    image: docker.io/headscale/headscale:latest
+    container_name: headscale
+    restart: unless-stopped
+    command: serve
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+    volumes:
+      - /home/roman/configs/vpn/headscale/config:/etc/headscale
+      - /home/roman/configs/vpn/headscale/lib:/var/lib/headscale
+      - /home/roman/configs/vpn/headscale/run:/var/run/headscale
+    healthcheck:
+      test: ["CMD", "headscale", "health"]
+    labels:
+      me.tale.headplane.target: headscale
+
+  headplane:
+    image: ghcr.io/tale/headplane:latest
+    container_name: headplane
+    restart: unless-stopped
+    depends_on:
+      - headscale
+    ports:
+      - "3000:3000"
+    volumes:
+      - '/home/roman/configs/vpn/headplane/config/config.yaml:/etc/headplane/config.yaml'
+      - '/home/roman/configs/vpn/headplane/lib:/var/lib/headplane'
+      - /home/roman/configs/vpn/headscale/config/config.yaml:/etc/headscale/config.yaml
+      - /var/run/docker.sock:/var/run/docker.sock:ro

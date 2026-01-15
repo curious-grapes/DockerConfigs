@@ -1,0 +1,23 @@
+server:
+  host: "0.0.0.0"
+  port: 3000
+  base_url: "http://localhost:3000"
+  cookie_secret: "CHANGE_ME"
+  cookie_secure: true
+  cookie_max_age: 86400
+  data_path: "/var/lib/headplane"
+
+headscale:
+  url: http://headscale:8080
+  config_path: "/etc/headscale/config.yaml"
+  config_strict: true
+
+integration:
+  agent:
+    enabled: false
+    pre_authkey: "CHANGE_ME"
+
+  docker:
+    enabled: true
+    container_label: "me.tale.headplane.target=headscale"
+    socket: "unix:///var/run/docker.sock"
