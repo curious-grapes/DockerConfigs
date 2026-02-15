@@ -7,6 +7,7 @@ services:
       - "8020:8081"
     volumes:
       - /mnt/share/Media/Downloads/youtube:/downloads
+      - /mnt/family/Natali/скачане ютуб моє:/downloads/yt_linked
     environment:
       - DELETE_FILE_ON_TRASHCAN=true
       - PUBLIC_HOST_URL=${PUBLIC_HOST_URL}
