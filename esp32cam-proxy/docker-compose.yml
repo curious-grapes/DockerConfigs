@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  esp32cam-proxy:
+    build: .
+    container_name: esp32cam-proxy
+    restart: unless-stopped
+
+    ports:
+      - "8034:8034"
+
+    environment:
+      # ── Hardware ──────────────────────────────────────────────────────
+      ESP32_HOST:        "192.168.8.9"   # IP / hostname of the ESP32-CAM
+      ESP32_PORT_CAM:    "80"            # control + snapshot port (default 80)
+      ESP32_PORT_STREAM: "81"            # MJPEG stream port (default 81)
+      PROXY_PORT:        "8034"          # port this container listens on
+
+      # ── Resolution ───────────────────────────────────────────────────
+      # Named:   96x96 | QQVGA | QCIF | HQVGA | 240x240 | QVGA | CIF |
+      #          HVGA  | VGA   | SVGA | XGA   | HD      | SXGA | UXGA
+      # Numeric: 0 … 13  (see above, left-to-right)
+      RESOLUTION: "VGA"
+
+      # ── Image quality ─────────────────────────────────────────────────
+      QUALITY:    "10"    # JPEG quality: 0-63, lower = higher quality / larger file
+      BRIGHTNESS: "0"     # -2 … +2
+      SATURATION: "0"     # -2 … +2
+      CONTRAST:   "0"     # -2 … +2
+
+      # ── Orientation ──────────────────────────────────────────────────
+      VFLIP:   "0"        # 0 = off, 1 = on
+      HMIRROR: "0"        # 0 = off, 1 = on
+
+    # Optional: if the ESP32-CAM is on a different Docker network
+    # networks:
+    #   - camera_network
+
+# networks:
+#   camera_network:
+#     driver: bridge
