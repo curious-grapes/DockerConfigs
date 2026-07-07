@@ -2,18 +2,19 @@
 version: "2.1"
 services:
   transmission:
-    image: lscr.io/linuxserver/transmission:latest
+    image: lscr.io/linuxserver/transmission:4.0.6
     container_name: transmission
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Kyiv
-      - USER=${USER} #optional
+      - USER=roman #optional
       - PASS=${PASS} #optional
-      - WHITELIST= #optional
+      - UMASK=022
     volumes:
       - /home/roman/configs/transmission:/config
-      - /mnt/media/Downloads:/downloads
+      - /mnt/share/Media/Downloads:/downloads
+#      - /mnt/media/Downloads:/downloads
       - /mnt/share/Media/Torrents:/watch
     ports:
       - 8009:9091
